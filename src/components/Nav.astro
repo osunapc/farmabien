@@ -1,0 +1,9 @@
+---
+import CartIcon from './CartIcon.jsx';
+---
+
+<nav class="flex items-center gap-6">
+  <a href="/" class="hover:text-secondary transition-colors">Inicio</a>
+  <a href="/productos" class="hover:text-secondary transition-colors">Productos</a>
+  <CartIcon client:load />
+</nav>

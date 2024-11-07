@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CartList from "../components/CartList";
+---
+
+<Layout title="Carrito de Compras">
+	<div class="container mx-auto px-4 py-8">
+		<h1 class="text-3xl font-bold mb-8">Carrito de Compras</h1>
+
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+			<div class="lg:col-span-2">
+				<CartList client:load />
+			</div>
+		</div>
+	</div>
+</Layout>
