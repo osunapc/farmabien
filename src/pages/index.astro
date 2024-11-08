@@ -2,8 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import AddToCartButton from "../components/AddToCartButton";
 import { supabase } from "../lib/supabase";
-
-
+import { labs } from "../logosLabs";
+import { d } from "../../dist/chunks/astro/server_DQXSxS51.mjs";
 
 let { data: productos, error } = await supabase
 	.from("productos")
@@ -12,14 +12,17 @@ let { data: productos, error } = await supabase
 ---
 
 <Layout title="Inicio">
-	<section class="bg-gradient-to-r from-primary to-secondary text-white py-20">
-		<div class="container mx-auto px-4">
-			<h1 class="text-5xl font-bold mb-4">Bienvenido a FarmaBien</h1>
-			<p class="text-xl">Tu salud es nuestra prioridad</p>
+	<section class="">
+		<div>
+			<img
+				class="object-cover"
+				src="/Banner-WEB-Principal-FB.avif"
+				alt="baner de farmabien"
+			/>
 		</div>
 	</section>
 
-	<section class="container mx-auto px-4 py-16">
+	<section class="container mx-auto px-4 py-16 text-center">
 		<h2 class="text-3xl font-bold mb-8">Productos Destacados</h2>
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 			{
@@ -30,11 +33,15 @@ let { data: productos, error } = await supabase
 						nombre: string;
 						laboratorio: string;
 						precio: number;
-					}) => (
-						<div class="bg-white rounded-lg shadow-md overflow-hidden">
+					}) => {
+						const imageSrc =
+							product.imagen ? product.imagen : "/blank-product.webp";
+
+						return(
+							<div class="bg-white rounded-lg shadow-md overflow-hidden">
 							<a href={`/productos/${product.id}`}>
 								<img
-									src={product.imagen}
+									src={imageSrc}
 									alt={product.nombre}
 									class="w-full h-48 object-cover"
 								/>
@@ -44,8 +51,8 @@ let { data: productos, error } = await supabase
 									<h3 class="font-bold text-lg mb-2">{product.nombre}</h3>
 								</a>
 								<p class="text-gray-600 mb-2">{product.laboratorio}</p>
-								<p class="text-primary font-bold mb-4">
-									S/ {product.precio.toFixed(2)}
+								<p class="text-red-600 font-bold mb-4">
+									Bs. {product.precio.toFixed(2)}
 								</p>
 								<AddToCartButton
 									client:load
@@ -58,8 +65,28 @@ let { data: productos, error } = await supabase
 								/>
 							</div>
 						</div>
-					)
+						)
+					}
 				)
+			}
+		</div>
+	</section>
+	<section class="flex flex-col justify-center items-center gap-4">
+		<div class="text-center my-6">
+			<h2 style="font-size:cal(1rem -7vw);">
+				<span class="text-green-500 font-bold">Nuestros</span>
+				<span>Colaboradores</span>
+			</h2>
+		</div>
+		<div class="container flex justify-center items-center gap-2 mb-6">
+			{
+				labs.map((logo) => {
+					return (
+						<div class="w-[10vw]">
+							<img class="" src={logo.img} alt={logo.alt} />
+						</div>
+					);
+				})
 			}
 		</div>
 	</section>
