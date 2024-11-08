@@ -3,7 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import AddToCartButton from "../components/AddToCartButton";
 import { supabase } from "../lib/supabase";
 import { labs } from "../logosLabs";
-import { d } from "../../dist/chunks/astro/server_DQXSxS51.mjs";
 
 let { data: productos, error } = await supabase
 	.from("productos")
