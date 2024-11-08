@@ -11,7 +11,7 @@ export default function OrdersTable() {
 	}, []);
 
 	async function fetchPedidos() {
-		const { data, error } = await supabase.from("pedidos").select("*");
+		const { data, error } = await supabase.from("rechazados").select("*");
 		if (error) {
 			console.error("Error fetching pedidos:", error);
 		} else {
@@ -19,70 +19,97 @@ export default function OrdersTable() {
 		}
 	}
 
-	async function handleAceptar(pedido) {
-		try {
-			const { data, error } = await supabase
-				.from("aceptados")
-				.insert([
-					{
-						id: pedido.id,
-						productos: pedido.productos,
-						nombre: pedido.nombre,
-						direccion: pedido.direccion,
-						telefono: pedido.telefono,
-						deliveryCosto: pedido.deliveryCosto,
-						total: pedido.total,
-						tipoDePago: pedido.tipoDePago,
-						numeroDeReferencia: pedido.numeroDeReferencia,
-						estado: "aceptado",
-						fecha: pedido.fecha,
-					},
-				])
-				.select();
-
-			const { error: errorDelivery } = await supabase
-				.from("delivery")
-				.insert([
-					{
-						nombre: pedido.nombre,
-						telefono: pedido.telefono,
-						direccion: pedido.direccion,
-						estado: false,
-					},
-				])
-				.select();
-
-			alert("Pedido enviado, el motorizado recibirá una alerta");
-			fetchPedidos(); // Refresh the list after accepting
-		} catch (error) {
-			console.error(error);
-		}
+	async function handleImprimir() {
+		const printWindow = window.open("", "_blank");
+		printWindow.document.write(`
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<title>Imprimir Pedidos</title>
+					<style>
+						table {
+							width: 100%;
+							border-collapse: collapse;
+						}
+						th, td {
+							border: 1px solid black;
+							padding: 8px;
+							text-align: center;
+						}
+						th {
+							background-color: #f2f2f2;
+						}
+					</style>
+				</head>
+				<body>
+					<h1>Pedidos</h1>
+					<table>
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Producto</th>
+								<th>Direccion</th>
+								<th>Telefono</th>
+								<th>TipoDePago</th>
+								<th>NumeroDeReferencia</th>
+								<th>Delivery costo</th>
+								<th>Total</th>
+								<th>Fecha</th>
+								<th>Estado</th>
+							</tr>
+						</thead>
+						<tbody>
+							${pedidos
+								.map(
+									(pedido) => `
+								<tr>
+									<td>${pedido.nombre}</td>
+									<td>${pedido.productos
+										.map(
+											(producto) =>
+												`${producto.name} (Unids: ${producto.quantity})`
+										)
+										.join("<br>")}</td>
+									<td>${pedido.direccion}</td>
+									<td>${pedido.telefono}</td>
+									<td>${pedido.tipoDePago}</td>
+									<td>${pedido.numeroDeReferencia}</td>
+									<td>${pedido.deliveryCosto}</td>
+									<td>Bs.${pedido.total}</td>
+									<td>${pedido.fecha}</td>
+									<td>${pedido.estado}</td>
+								</tr>
+							`
+								)
+								.join("")}
+						</tbody>
+					</table>
+				</body>
+			</html>
+		`);
+		printWindow.document.close();
+		printWindow.print();
 	}
 
-	async function handleRechazar(pedido) {
-		try {
-			const { data: rechazados, error } = await supabase
-				.from("rechazados")
-				.insert([
-					{
-						id: pedido.id,
-						productos: pedido.productos,
-						nombre: pedido.nombre,
-						direccion: pedido.direccion,
-						telefono: pedido.telefono,
-						deliveryCosto: pedido.deliveryCosto,
-						total: pedido.total,
-						tipoDePago: pedido.tipoDePago,
-						numeroDeReferencia: pedido.numeroDeReferencia,
-						estado: "rechazado",
-						fecha: pedido.fecha,
-					},
-				])
-				.select();
-			alert("Pedido enviado a la pagina rechazados");
-			fetchPedidos(); // Refresh the list after rejecting
-		} catch (error) {
-			console.error("Error rejecting order:", error);
+	async function handleEliminarPedido(id: any) {
+		// Confirmar la acción
+		const confirmDelete = window.confirm(
+			"¿Estás seguro de que deseas eliminar el pedidos?"
+		);
+		if (!confirmDelete) {
+			return; // Si el usuario cancela, no hacer nada
+		}
+
+		// Eliminar  registro de la tabla "aceptados"
+		const { error } = await supabase.from("rechazados").delete().eq("id", id); // Eliminar solo el pedido con el ID especificado
+
+		if (error) {
+			console.error("Error eliminando el pedido:", error);
+		} else {
+			// Si la eliminación es exitosa, actualiza el estado local
+			setPedidos([]);
+            fetchPedidos();
+			alert("el pedidos han sido eliminado.");
 		}
 	}
 
@@ -163,17 +190,17 @@ export default function OrdersTable() {
 							{pedido.fecha}
 						</td>
 						<td className="px-4 py-4 whitespace-no-wrap border-b border-gray-200">
-							<span className="inline-flex px-2 text-xs font-semibold leading-4 text-green-800 bg-green-100 rounded-full">
+							<span className="inline-flex px-2 text-xs font-semibold leading-4 text-green-100 bg-red-400 rounded-full">
 								{pedido.estado}
 							</span>
 						</td>
 						<td className="px-4 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
 							<div className="flex flex-col gap-4">
-								<button onClick={() => handleAceptar(pedido)}>
-									<span style={{ fontSize: "30px" }}>👍</span>
+								<button onClick={() => handleImprimir()}>
+									<span style={{ fontSize: "30px" }}>🖨️</span>
 								</button>
-								<button onClick={() => handleRechazar(pedido)}>
-									<span style={{ fontSize: "30px" }}>⛔</span>
+								<button onClick={() => handleEliminarPedido(pedido.id)}>
+									<span style={{ fontSize: "30px" }}>🗑️</span>
 								</button>
 							</div>
 						</td>

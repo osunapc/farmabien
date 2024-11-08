@@ -1,5 +1,7 @@
 ---
-import Tbody from "../../components/Dashboard/Tbody";
+import Tnuevospedidos from "../../components/Dashboard/Tnuevospedidos";
+import Tpedidosaceptados from "../../components/Dashboard/Tpedidosaceptados";
+import Tpedidosrechazados from "../../components/Dashboard/Tpedidosrechazados";
 ---
 
 <html lang="en">
@@ -11,18 +13,19 @@ import Tbody from "../../components/Dashboard/Tbody";
 		<title>Delivery</title>
 	</head>
 	<style>
-        /* Estilo para el encabezado fijo */
-        th {
-            position: sticky;
-            top: 0;
-            background-color: white; /* Cambia el color según tus necesidades */
-            z-index: 10; /* Asegúrate de que esté por encima del contenido */
-        }
-    </style>
+		/* Estilo para el encabezado fijo */
+		th {
+			position: sticky;
+			top: 0;
+			background-color: white; /* Cambia el color según tus necesidades */
+			z-index: 10; /* Asegúrate de que esté por encima del contenido */
+		}
+	</style>
 	<body style="scrollbar-color: green rgba(155, 125, 144, 0);">
 		<div>
 			<script
-				src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"defer></script>
+				src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+				defer></script>
 			<div>
 				<div
 					x-data="{ sidebarOpen: false, currentTab: 'nuevos' }"
@@ -207,13 +210,13 @@ import Tbody from "../../components/Dashboard/Tbody";
 											class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
 										>
 											<template x-if="currentTab === 'nuevos'">
-												<span><Tbody client:load /></span>
+												<span><Tnuevospedidos client:load /></span>
 											</template>
 											<template x-if="currentTab === 'aceptados'">
-												<div>Aquí va la tabla de aceptados</div>
+												<div><Tpedidosaceptados client:load /></div>
 											</template>
 											<template x-if="currentTab === 'rechazados'">
-												<div>Aquí va la tabla de rechazados</div>
+												<div><Tpedidosrechazados client:load /></div>
 											</template>
 										</div>
 									</div>
