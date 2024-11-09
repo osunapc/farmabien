@@ -1,13 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import AddToCartButton from "../components/AddToCartButton";
-import { supabase } from "../lib/supabase";
 import { labs } from "../logosLabs";
+import Productos from "../components/index/Productos";
 
-let { data: productos, error } = await supabase
-	.from("productos")
-	.select("*")
-	.gt("inventario", 0);
+
 ---
 
 <Layout title="Inicio">
@@ -21,55 +17,8 @@ let { data: productos, error } = await supabase
 		</div>
 	</section>
 
-	<section class="container mx-auto px-4 py-16 text-center">
-		<h2 class="text-3xl font-bold mb-8">Productos Destacados</h2>
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-			{
-				productos.map(
-					(product: {
-						id: any;
-						imagen: string;
-						nombre: string;
-						laboratorio: string;
-						precio: number;
-					}) => {
-						const imageSrc =
-							product.imagen ? product.imagen : "/blank-product.webp";
+	<Productos client:load/>
 
-						return(
-							<div class="bg-white rounded-lg shadow-md overflow-hidden">
-							<a href={`/productos/${product.id}`}>
-								<img
-									src={imageSrc}
-									alt={product.nombre}
-									class="w-full h-48 object-cover"
-								/>
-							</a>
-							<div class="p-4">
-								<a href={`/productos/${product.id}`}>
-									<h3 class="font-bold text-lg mb-2">{product.nombre}</h3>
-								</a>
-								<p class="text-gray-600 mb-2">{product.laboratorio}</p>
-								<p class="text-red-600 font-bold mb-4">
-									Bs. {product.precio.toFixed(2)}
-								</p>
-								<AddToCartButton
-									client:load
-									product={{
-										id: product.id,
-										name: product.nombre,
-										price: product.precio,
-										image: product.imagen,
-									}}
-								/>
-							</div>
-						</div>
-						)
-					}
-				)
-			}
-		</div>
-	</section>
 	<section class="flex flex-col justify-center items-center gap-4">
 		<div class="text-center my-6">
 			<h2 style="font-size:cal(1rem -7vw);">
