@@ -2,22 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import { labs } from "../logosLabs";
 import Productos from "../components/index/Productos";
-
-
 ---
 
-<Layout title="Inicio">
-	<section class="">
-		<div>
-			<img
-				class="object-cover"
-				src="/Banner-WEB-Principal-FB.avif"
-				alt="baner de farmabien"
-			/>
-		</div>
-	</section>
-
-	<Productos client:load/>
+<Layout title="Bienbenido a farmabien delivery">
+	
+	<Productos client:load />
 
 	<section class="flex flex-col justify-center items-center gap-4">
 		<div class="text-center my-6">
