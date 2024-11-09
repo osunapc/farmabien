@@ -69,14 +69,14 @@ export default function ProductosDestacados() {
 			<form className="container mx-auto my-4">
 				<label
 					htmlFor="busqueda"
-					className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+					className="mb-2 text-sm font-medium text-gray-900 sr-only"
 				>
-					Search
+					Buscar
 				</label>
 				<div className="relative">
 					<div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
 						<svg
-							className="w-4 h-4 text-gray-500"
+							className="w-4 h-4 text-gray-800"
 							aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -95,7 +95,7 @@ export default function ProductosDestacados() {
 						id="busqueda"
 						value={busqueda}
 						type="text"
-						className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-green-500 focus:border-green-500"
+						className="block w-full p-4 ps-10 text-base text-gray-900 border border-gray-300 rounded-lg bg-green-200 focus:ring-green-500 focus:border-green-800"
 						placeholder="Buscar tu Medicamento..."
 						onChange={(e) => setBusqueda(e.target.value)}
 					/>
