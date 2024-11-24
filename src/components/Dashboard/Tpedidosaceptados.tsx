@@ -118,37 +118,37 @@ export default function OrdersTable() {
 		<table className="min-w-full">
 			<thead className="stiky">
 				<tr>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Nombre
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Producto
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Direccion
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Telefono
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						TipoDePago
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						NumeroDeReferencia
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Delivery costo
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Total
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Fecha
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Estado
 					</th>
-					<th className="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+					<th className="px-6 py-3 border-b border-gray-200 bg-green-500"></th>
 				</tr>
 			</thead>
 			<tbody className="bg-white">

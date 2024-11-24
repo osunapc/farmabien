@@ -2,5 +2,4 @@
   "compilerOptions": {
     "jsx": "react"
   },
-  "extends": "astro/tsconfigs/base"
 }

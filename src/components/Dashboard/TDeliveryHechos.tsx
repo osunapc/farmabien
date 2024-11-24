@@ -11,9 +11,11 @@ export default function OrdersTable() {
 	}, []);
 
 	async function fetchPedidos() {
-		const { data, error } = await supabase.from("rechazados").select("*");
+		const { data, error } = await supabase
+			.from("deliverys_aceptados")
+			.select("*");
 		if (error) {
-			console.error("Error fetching pedidos:", error);
+			console.error("Error fetching deliverys_aceptados:", error);
 		} else {
 			setPedidos(data);
 		}
@@ -23,69 +25,89 @@ export default function OrdersTable() {
 		const printWindow = window.open("", "_blank");
 		printWindow.document.write(`
 			<!DOCTYPE html>
-			<html>
-				<head>
-					<title>Imprimir Pedidos</title>
-					<style>
-						table {
-							width: 100%;
-							border-collapse: collapse;
-						}
-						th, td {
-							border: 1px solid black;
-							padding: 8px;
-							text-align: center;
-						}
-						th {
-							background-color: #f2f2f2;
-						}
-					</style>
-				</head>
-				<body>
-					<h1>Pedidos</h1>
-					<table>
-						<thead>
-							<tr>
-								<th>Nombre</th>
-								<th>Producto</th>
-								<th>Direccion</th>
-								<th>Telefono</th>
-								<th>TipoDePago</th>
-								<th>NumeroDeReferencia</th>
-								<th>Delivery costo</th>
-								<th>Total</th>
-								<th>Fecha</th>
-								<th>Estado</th>
-							</tr>
-						</thead>
-						<tbody>
-							${pedidos
-								.map(
-									(pedido) => `
-								<tr>
-									<td>${pedido.nombre}</td>
-									<td>${pedido.productos
-										.map(
-											(producto) =>
-												`${producto.name} (Unids: ${producto.quantity})`
-										)
-										.join("<br>")}</td>
-									<td>${pedido.direccion}</td>
-									<td>${pedido.telefono}</td>
-									<td>${pedido.tipoDePago}</td>
-									<td>${pedido.numeroDeReferencia}</td>
-									<td>${pedido.deliveryCosto}</td>
-									<td>Bs.${pedido.total}</td>
-									<td>${pedido.fecha}</td>
-									<td>${pedido.estado}</td>
-								</tr>
-							`
-								)
-								.join("")}
-						</tbody>
-					</table>
-				</body>
-			</html>
+			<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deliverys Entregados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        img {
+            width: 100px; /* Ajusta el tamaño del logo según sea necesario */
+            margin-bottom: 20px;
+        }
+        table {
+            width: 80%; /* Ajusta el ancho de la tabla */
+            border-collapse: collapse;
+            border-radius: 10px; /* Bordes redondeados */
+            overflow: hidden; /* Para que los bordes redondeados se apliquen */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra para la tabla */
+        }
+        th, td {
+            border: 1px solid #ddd; /* Color de borde más suave */
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50; /* Color de fondo para el encabezado */
+            color: white; /* Color del texto del encabezado */
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Color de fondo para filas pares */
+        }
+        tr:hover {
+            background-color: #ddd; /* Color de fondo al pasar el mouse */
+        }
+    </style>
+</head>
+<body>
+
+    <img src="/fb_logo.svg" alt="Logo farmabien" /> <!-- Asegúrate de tener un logo en esta ruta -->
+    <h1>Deliverys Entregados</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Costo de Delivery</th>
+                <th>Estado</th>
+                <th>Motorizado</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${pedidos
+							.map(
+								(pedido) => `
+                <tr>
+                    <td>${pedido.nombre}</td>
+                    <td>${pedido.direccion}</td>
+                    <td>${pedido.telefono}</td>
+                    <td>${pedido.deliveryCosto}</td>
+                    <td>${pedido.estado}</td>
+                    <td>${pedido.realizado_por}</td>
+                </tr>
+            `
+							)
+							.join("")}
+        </tbody>
+    </table>
+</body>
+</html>
 		`);
 		printWindow.document.close();
 		printWindow.print();
@@ -120,9 +142,7 @@ export default function OrdersTable() {
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Nombre
 					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						Producto
-					</th>
+
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Direccion
 					</th>
@@ -130,22 +150,13 @@ export default function OrdersTable() {
 						Telefono
 					</th>
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						TipoDePago
-					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						NumeroDeReferencia
-					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Delivery costo
 					</th>
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						Total
-					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						Fecha
-					</th>
-					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Estado
+					</th>
+					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-center text-white uppercase border-b border-gray-200 bg-green-500">
+						Motorizado
 					</th>
 					<th className="px-6 py-3 border-b border-gray-200 bg-green-500"></th>
 				</tr>
@@ -153,19 +164,9 @@ export default function OrdersTable() {
 			<tbody className="bg-white">
 				{pedidos.map((pedido) => (
 					<tr key={pedido.id}>
-						<td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+						<td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 ">
 							<div className="text-sm font-medium leading-4 text-gray-900">
 								{pedido.nombre}
-							</div>
-						</td>
-						<td className="px-4 py-4 whitespace-no-wrap border-b border-gray-200">
-							<div className="text-sm leading-4 text-gray-900">
-								{pedido.productos.map((producto, index) => (
-									<div key={index}>
-										{producto.name}
-										<div>Unids {producto.quantity}</div>
-									</div>
-								))}
 							</div>
 						</td>
 						<td className="px-4 py-4 text-sm leading-4 text-gray-500 whitespace-no-wrap border-b border-gray-200">
@@ -175,24 +176,15 @@ export default function OrdersTable() {
 							{pedido.telefono}
 						</td>
 						<td className="px-4 py-4 text-sm leading-4 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-							{pedido.tipoDePago}
-						</td>
-						<td className="px-4 py-4 text-sm leading-4 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-							{pedido.numeroDeReferencia}
-						</td>
-						<td className="px-4 py-4 text-sm leading-4 text-gray-500 whitespace-no-wrap border-b border-gray-200">
 							{pedido.deliveryCosto}
-						</td>
-						<td className="px-4 py-4 text-sm leading-4 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-							Bs.<strong>{pedido.total}</strong>{" "}
-						</td>
-						<td className="px-4 py-4 text-sm leading-4 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-							{pedido.fecha}
 						</td>
 						<td className="px-4 py-4 whitespace-no-wrap border-b border-gray-200">
 							<span className="inline-flex px-2 text-xs font-semibold leading-4 text-green-100 bg-red-400 rounded-full">
 								{pedido.estado}
 							</span>
+						</td>
+						<td className="px-4 py-4 text-sm leading-4 text-gray-500 whitespace-no-wrap border-b border-gray-200">
+							{pedido.realizado_por}
 						</td>
 						<td className="px-4 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
 							<div className="flex flex-col gap-4">

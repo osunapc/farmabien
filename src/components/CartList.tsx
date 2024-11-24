@@ -195,9 +195,9 @@ export default function CartAndCheckout() {
 								Realiza el pago a través de:
 							</p>
 							<ul className="text-sm text-gray-600 list-disc list-inside mb-4">
-								<li>Yape: 999-999-999</li>
-								<li>Plin: 999-999-999</li>
-								<li>BCP: 123-456-789</li>
+								<li>ZELLE: zelle@gmail.com</li>
+								<li>Pago movil: 04140000000 ci 10.000.000</li>
+								<li>Paypal: ejemplo@gmail.com</li>
 							</ul>
 						</div>
 
@@ -239,7 +239,7 @@ export default function CartAndCheckout() {
 									value={phone}
 									onChange={(e) => setPhone(e.target.value)}
 									className="w-full border rounded-lg px-3 py-2"
-									placeholder="Ejemplo: 04140000000"
+									placeholder="Ejemplo: +58414735-31-42"
 								/>
 							</div>
 							<div>
@@ -255,7 +255,7 @@ export default function CartAndCheckout() {
 									<option value="">Selecciona el tipo de pago</option>
 									<option value="Yape">Zelle</option>
 									<option value="Plin">Pago movil</option>
-									<option value="BCP">Transferencia</option>
+									<option value="BCP">Paypal</option>
 								</select>
 							</div>
 							<div>
@@ -274,9 +274,9 @@ export default function CartAndCheckout() {
 							<button
 								type="submit"
 								disabled={loading}
-								className="w-full bg-primary hover:bg-primary/90 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+								className="w-full bg-green-500 hover:bg-green-800 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors"
 							>
-								{loading ? "Procesando..." : "Confirmar Pedido"}
+								{loading ? "Procesando..." : "Realizar Pedido"}
 							</button>
 						</form>
 					</div>

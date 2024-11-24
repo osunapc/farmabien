@@ -1,4 +1,5 @@
 ---
+import TDeliveryHechos from "../../components/Dashboard/TDeliveryHechos";
 import Tnuevospedidos from "../../components/Dashboard/Tnuevospedidos";
 import Tpedidosaceptados from "../../components/Dashboard/Tpedidosaceptados";
 import Tpedidosrechazados from "../../components/Dashboard/Tpedidosrechazados";
@@ -135,6 +136,7 @@ import Tpedidosrechazados from "../../components/Dashboard/Tpedidosrechazados";
 							</a>
 
 							<a
+								@click="currentTab = 'motorizados'"
 								class="flex items-center px-6 py-2 mt-4 text-gray-600 hover:bg-green-500 hover:bg-opacity-25 hover:text-gray-800"
 								href="#"
 							>
@@ -154,7 +156,7 @@ import Tpedidosrechazados from "../../components/Dashboard/Tpedidosrechazados";
 									</path>
 								</svg>
 
-								<span class="mx-3">Forms</span>
+								<span class="mx-3">Motorizados</span>
 							</a>
 						</nav>
 					</div>
@@ -202,6 +204,9 @@ import Tpedidosrechazados from "../../components/Dashboard/Tpedidosrechazados";
 									<template x-if="currentTab === 'rechazados'">
 										<span>Rechazados</span>
 									</template>
+									<template x-if="currentTab === 'motorizados'">
+										<span>Motorizados</span>
+									</template>
 								</h3>
 
 								<div class="mt-8"></div>
@@ -219,6 +224,9 @@ import Tpedidosrechazados from "../../components/Dashboard/Tpedidosrechazados";
 											</template>
 											<template x-if="currentTab === 'rechazados'">
 												<div><Tpedidosrechazados client:load /></div>
+											</template>
+											<template x-if="currentTab === 'motorizados'">
+												<div><TDeliveryHechos client:load /></div>
 											</template>
 										</div>
 									</div>
