@@ -24,7 +24,7 @@ export default function CartAndCheckout() {
 	useEffect(() => {}, [total, items]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+		//e.preventDefault();
 
 		if (items.length === 0) {
 			alert("Tu carrito está vacío");
