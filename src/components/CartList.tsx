@@ -24,7 +24,7 @@ export default function CartAndCheckout() {
 	useEffect(() => {}, [total, items]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
-		//e.preventDefault();
+		e.preventDefault();
 
 		if (items.length === 0) {
 			alert("Tu carrito está vacío");
@@ -74,8 +74,8 @@ export default function CartAndCheckout() {
 
 			console.log(pedidoData);
 			alert("¡Pedido realizado con éxito!");
-			// clearCart();
-			// window.location.href = "/";
+			 clearCart();
+			 window.location.href = "/";
 		} catch (error) {
 			console.error("Error al procesar el pedido:", error);
 			alert("Error al procesar el pedido");
