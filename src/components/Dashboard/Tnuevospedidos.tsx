@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
 import { supabase } from "../../lib/supabase";
 
 export default function OrdersTable() {
@@ -8,12 +7,34 @@ export default function OrdersTable() {
 
 	useEffect(() => {
 		fetchPedidos();
+
+		// Configurar el canal de Supabase para escuchar cambios en tiempo real
+		const channel = supabase
+			.channel("table-db-changes")
+			.on(
+				"postgres_changes",
+				{
+					event: "*",
+					schema: "public",
+					table: "pedidos",
+				},
+				(payload) => {
+					console.log("Cambio recibido:", payload);
+					fetchPedidos();
+				}
+			)
+			.subscribe();
+
+		// Limpiar la suscripción cuando el componente se desmonte
+		return () => {
+			supabase.removeChannel(channel);
+		};
 	}, []);
 
 	async function fetchPedidos() {
 		const { data, error } = await supabase.from("pedidos").select("*");
 		if (error) {
-			console.error("Error fetching pedidos:", error);
+			console.error("Error al obtener pedidos:", error);
 		} else {
 			setPedidos(data);
 		}
@@ -53,10 +74,10 @@ export default function OrdersTable() {
 				])
 				.select();
 
-				const res = await supabase.from("pedidos").delete().eq("id", pedido.id); 
+			const res = await supabase.from("pedidos").delete().eq("id", pedido.id);
 
 			alert("Pedido enviado, el motorizado recibirá una alerta");
-			fetchPedidos(); // Refresh the list after accepting
+			// Ya no es necesario llamar a fetchPedidos() aquí, ya que la actualización en tiempo real se encargará de ello
 		} catch (error) {
 			console.error(error);
 		}
@@ -83,21 +104,18 @@ export default function OrdersTable() {
 				])
 				.select();
 
-					const res = await supabase
-						.from("pedidos")
-						.delete()
-						.eq("id", pedido.id); 
-						
-			alert("Pedido enviado a la pagina rechazados");
-			fetchPedidos(); // Refresh the list after rejecting
+			const res = await supabase.from("pedidos").delete().eq("id", pedido.id);
+
+			alert("Pedido enviado a la página de rechazados");
+			// Ya no es necesario llamar a fetchPedidos() aquí, ya que la actualización en tiempo real se encargará de ello
 		} catch (error) {
-			console.error("Error rejecting order:", error);
+			console.error("Error al rechazar el pedido:", error);
 		}
 	}
 
 	return (
 		<table className="min-w-full">
-			<thead className="stiky">
+			<thead className="sticky">
 				<tr>
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Nombre
@@ -106,19 +124,19 @@ export default function OrdersTable() {
 						Producto
 					</th>
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						Direccion
+						Dirección
 					</th>
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						Telefono
+						Teléfono
 					</th>
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						TipoDePago
+						Tipo de Pago
 					</th>
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						NumeroDeReferencia
+						Número de Referencia
 					</th>
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
-						Delivery costo
+						Costo de Delivery
 					</th>
 					<th className="px-2 py-3 text-xs font-medium leading-4 tracking-wider text-white uppercase border-b border-gray-200 bg-green-500">
 						Total
