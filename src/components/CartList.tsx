@@ -16,10 +16,10 @@ export default function CartAndCheckout() {
 	const [phone, setPhone] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [selectedZone, setSelectedZone] = useState(deliveryZones[0]);
-	const [direccion, setdireccion] = useState(""); // Added direccion state
-	const [nombre, setnombre] = useState(""); // Added nombre state
-	const [paymentReference, setPaymentReference] = useState(""); //Added in update
-	const [tipoDePago, settipoDePago] = useState(""); //Added in update
+	const [direccion, setdireccion] = useState("");
+	const [nombre, setnombre] = useState("");
+	const [paymentReference, setPaymentReference] = useState("");
+	const [tipoDePago, settipoDePago] = useState("");
 
 	useEffect(() => {}, [total, items]);
 
@@ -30,6 +30,8 @@ export default function CartAndCheckout() {
 			alert("Tu carrito está vacío");
 			return;
 		}
+
+		setLoading(true);
 
 		try {
 			// Crear el pedido
@@ -57,10 +59,26 @@ export default function CartAndCheckout() {
 
 			// Actualizar el inventario de cada producto
 			const updatePromises = items.map(async (item) => {
+				// Primero, obtener el inventario actual
+				const { data: productoData, error: fetchError } = await supabase
+					.from("productos")
+					.select("inventario")
+					.eq("id", item.id)
+					.single();
+
+				if (fetchError) {
+					throw new Error(
+						`Error al obtener el inventario: ${fetchError.message}`
+					);
+				}
+
+				const inventarioActual = productoData.inventario;
+				const nuevoInventario = Math.max(0, inventarioActual - item.quantity);
+
 				const { error: updateError } = await supabase
 					.from("productos")
-					.update({ inventario: item.quantity - 1 }) // Resta 1 al inventario
-					.eq("id", item.id); // Asegúrate de actualizar el producto correcto
+					.update({ inventario: nuevoInventario })
+					.eq("id", item.id);
 
 				if (updateError) {
 					throw new Error(
@@ -74,8 +92,8 @@ export default function CartAndCheckout() {
 
 			console.log(pedidoData);
 			alert("¡Pedido realizado con éxito!");
-			 clearCart();
-			 window.location.href = "/";
+			clearCart();
+			window.location.href = "/";
 		} catch (error) {
 			console.error("Error al procesar el pedido:", error);
 			alert("Error al procesar el pedido");
@@ -139,9 +157,7 @@ export default function CartAndCheckout() {
 								</div>
 							</div>
 							<button
-								onClick={() => {
-									removeItem(item.id);
-								}}
+								onClick={() => removeItem(item.id)}
 								className="text-red-500 hover:text-red-700"
 							>
 								X
@@ -214,7 +230,7 @@ export default function CartAndCheckout() {
 									className="w-full border rounded-lg px-3 py-2"
 									placeholder="Ejemplo: Maria Perez"
 								/>
-							</div>{" "}
+							</div>
 							<div>
 								<label className="block text-sm font-medium mb-1">
 									Dirección exacta
@@ -227,8 +243,7 @@ export default function CartAndCheckout() {
 									className="w-full border rounded-lg px-3 py-2"
 									placeholder="Ejemplo: Calle Principal #123, Apto 4B"
 								/>
-							</div>{" "}
-							{/* Added direccion input */}
+							</div>
 							<div>
 								<label className="block text-sm font-medium mb-1">
 									Teléfono de contacto
@@ -253,9 +268,9 @@ export default function CartAndCheckout() {
 									className="w-full border rounded-lg px-3 py-2"
 								>
 									<option value="">Selecciona el tipo de pago</option>
-									<option value="Yape">Zelle</option>
-									<option value="Plin">Pago movil</option>
-									<option value="BCP">Paypal</option>
+									<option value="Zelle">Zelle</option>
+									<option value="Pago movil">Pago movil</option>
+									<option value="Paypal">Paypal</option>
 								</select>
 							</div>
 							<div>
