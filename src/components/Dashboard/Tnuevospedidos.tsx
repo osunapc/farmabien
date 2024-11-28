@@ -172,7 +172,7 @@ export default function OrdersTable() {
 							{pedido.direccion}
 						</td>
 						<td className="px-4 py-4 text-sm leading-4 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-							{pedido.telefono}
+							<a href={`" https://wa.me/${pedido.telefono}"`}>{pedido.telefono}</a>
 						</td>
 						<td className="px-4 py-4 text-sm leading-4 text-gray-500 whitespace-no-wrap border-b border-gray-200">
 							{pedido.tipoDePago}
